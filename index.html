@@ -12,46 +12,52 @@
 	<script data-main="js/main" src="js/libs/datatables/1.9.4/jquery.dataTables.js"></script>
 	
 	<style>
-		#organizations-list-table {
-		  width:940px !important;
+		#search-input-group {
+			width:50%;
+		}
+		.kot-items-view-btn {
+			width: 49px;
+			height: 34px;
 		}
 	</style>
 
 </head>
 <body>
-	
+	<nav class="navbar navbar-inverse" role="navigation">
+
+	<div style='margin-left: 100px;'>
+	<img src='imgs/toit-logo.png' style='height:75px; width:75px; margin-top: 2px;'/>
+	<h2 style='display:inline !important; color:white; margin-left: 10px;'>Kitchen Ordering Ticket System</h2>
+	</div>
+
+	</nav>
 	<div class="container">
 		<section>
+		<div id="organizations-container" class="span13">
 
-<div class="page-header">
-<!--<img src='imgs/toit-logo.png' style='height:100px; width:100px;'/>-->
-<h3 style='display:inline !important'>Toit KOT Item(s) List</h3>
-</div>
+		<div class="alert alert-warning">
+		  <p>Below is the list of Orderlines. Click particular Orderline's <em>status</em> to change it's 
+		  Status</p>
+		</div>
 
-<div class="row">
+		<form class="form-search">
+			<div class="btn-group pull-right">
+				  <button type="button" class="btn btn-default kot-items-view-btn"><span class="glyphicon glyphicon glyphicon-list"></span></button>
+				  <button type="button" class="btn btn-default kot-items-view-btn"><span class="glyphicon glyphicon glyphicon-th"></span></button>
+			</div>
 
-<div id="organizations-container" class="span13">
+			<div class="input-group" id="search-input-group">
+				<span class="input-group-addon">SEARCH</span>
+				<input id="organizations-search-input" type="text" class="form-control" placeholder="Search Ordered items">
+				<span id="organizations-search-reset" class="input-group-addon"><button type="button" class="btn btn-xs"><span class="glyphicon glyphicon-remove"></span></button></span>
+			</div>
+			
+			
+		</form>
 
-<div class="alert alert-warning">
-  <p>Below is the list of Orderlines. Click particular Orderline's <em>status</em> to change it's 
-  Status</p>
-</div>
+		</div>
 
-<form class="form-search">
-    <input 
-            id="organizations-search-input" 
-            class="span5 search-query" 
-            type="text"
-            placeholder="Search current Orderlines"/>
-    
-    <i id="organizations-search-reset" class="icon-remove reset-search"></i>
-</form>
-
-</div>
-
-</div>
-
-</section>
+	</section>
 	</div>
 	<script src="js/libs/ClassExtender.js" type="text/javascript"></script>
 	<script src="js/util/DataTableWidget.js"></script>

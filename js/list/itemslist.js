@@ -25,8 +25,8 @@ var ListSentOrderLinesWidget = DataTableWidget.extend({
             "bAutoWidth": true,
             "sDom": "tip",
             "aoColumns": [
-                { "mDataProp": "itemName", "sTitle": "Item", "sClass": self.ui.nameCellClass, "sWidth": "100px",},
-                { "mDataProp": "itemQuantity", "sTitle": "Qty", "sDefaultContent": "", "sWidth": "250px"},
+                { "mDataProp": "itemName", "sTitle": "Item", "sClass": self.ui.nameCellClass, "sWidth": "200px",},
+                { "mDataProp": "itemQuantity", "sTitle": "Qty", "sDefaultContent": "", "sWidth": "100px"},
                 //{ "mDataProp": "itemDate", "sTitle": "Table No", "sWidth": "100px", "sType": "date"},
 				//{ "mDataProp": "kot", "sTitle": "KOT", "sWidth": "50px"},
                 { "mDataProp": "itemCreatedBy", "sTitle": "Steward", "sWidth": "100px"},
@@ -50,7 +50,7 @@ var ListSentOrderLinesWidget = DataTableWidget.extend({
      * should be done here.
      * */
     _addDatumToTable: function(datum) {
-			var status = "<span style='background-color: #6cb33f; float:left; border-radius: 17px; margin-left: 0px; font-size: 12px !important; width: 40%; text-align: center;'>"+datum.itemStatus+"</span>";
+			var status = "<button type='button' class='btn btn-primary'>"+datum.itemStatus+"</span>";
 			datum.itemStatus = status;
             return datum;
     },
