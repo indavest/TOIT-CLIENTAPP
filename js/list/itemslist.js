@@ -27,7 +27,7 @@ var ListSentOrderLinesWidget = DataTableWidget.extend({
             "aoColumns": [
                 { "mDataProp": "itemName", "sTitle": "Item", "sClass": self.ui.nameCellClass, "sWidth": "200px",},
                 { "mDataProp": "itemQuantity", "sTitle": "Qty", "sDefaultContent": "", "sWidth": "100px"},
-                //{ "mDataProp": "itemDate", "sTitle": "Table No", "sWidth": "100px", "sType": "date"},
+                { "mDataProp": "itemTableId", "sTitle": "Table No", "sWidth": "100px", "sType": "date"},
 				//{ "mDataProp": "kot", "sTitle": "KOT", "sWidth": "50px"},
                 { "mDataProp": "itemCreatedBy", "sTitle": "Steward", "sWidth": "100px"},
 				//{ "mDataProp": "itemInTime", "sTitle": "Intime", "sWidth": "50px"},
@@ -50,7 +50,7 @@ var ListSentOrderLinesWidget = DataTableWidget.extend({
      * should be done here.
      * */
     _addDatumToTable: function(datum) {
-			var status = "<button type='button' class='btn btn-primary'>"+datum.itemStatus+"</span>";
+			var status = "<button type='button' id="+datum.id+" class='btn btn-primary'>"+datum.itemStatus+"</span>";
 			datum.itemStatus = status;
             return datum;
     },
@@ -64,15 +64,47 @@ var ListSentOrderLinesWidget = DataTableWidget.extend({
 			data:{
 				'Authorization' : 'Basic VG9pdEFkbWluOnRvaXRhZG1pbg=='
 			},
-			success: function(data) {
-				me.initView(data);
+			success: function(response) {
+				me.initView($.parseJSON(response.data));
 			},
 			error: function (response) {
 			}
 		});
     },
+	_changeKotItemStatus: function(itemId, itemStatus) {
+		var status;
+		if(itemStatus === 'SENT') {
+			status = 'INPROGRESS';
+		} else if(itemStatus === 'INPROGRESS') {
+			status = 'READY';
+		} else if(itemStatus === 'READY') {
+			return;
+		}
+		var requestParams = {
+			orderLineId: itemId,
+			orderLineStatus: status,
+			Authorization: 'Basic VG9pdEFkbWluOnRvaXRhZG1pbg==',
+			isKotCall: 'true'
+		};
+		
+		$.ajax({
+			type: 'get',
+			url: this.url.restURL,
+			dataType: 'json',
+			async: false,
+			data: requestParams,
+			success: function(data) {
+				console.log(data);
+			},
+			error: function (response) {
+			}
+		});
+	},
     _bindGUIEvents: function() {
         var self = this;
+		$("#organizations-list-table tbody tr").find('button').on('click', function(){
+			self._changeKotItemStatus(this.id, this.textContent);
+		});
         self._bindSearchEvents();
     }
     
