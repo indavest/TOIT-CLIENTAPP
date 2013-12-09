@@ -10,6 +10,10 @@
 	<script data-main="js/main" src="js/libs/jquery-plugins/validate/additional-methods.js"></script>
 	<script data-main="js/main" src="js/libs/jquery-plugins/data-tables/datatables-utils.js"></script>
 	<script data-main="js/main" src="js/libs/datatables/1.9.4/jquery.dataTables.js"></script>
+	<script src="js/libs/ClassExtender.js" type="text/javascript"></script>
+	<script src="js/util/DataTableWidget.js"></script>
+	<script src="js/libs/jquery-plugins/timer/jquery.timer.js"></script>
+	<script src="js/list/itemslist.js"></script>
 	
 	<style>
 		#search-input-group {
@@ -42,7 +46,7 @@
 
 		<form class="form-search">
 			<div class="btn-group pull-right">
-				  <button type="button" class="btn btn-default kot-items-view-btn"><span class="glyphicon glyphicon glyphicon-list"></span></button>
+				  <button type="button" id="timer-button" class="btn btn-default kot-items-view-btn"><span class="glyphicon glyphicon glyphicon-dashboard"></span></button>
 				  <button type="button" class="btn btn-default kot-items-view-btn"><span class="glyphicon glyphicon glyphicon-th"></span></button>
 			</div>
 
@@ -59,9 +63,7 @@
 
 	</section>
 	</div>
-	<script src="js/libs/ClassExtender.js" type="text/javascript"></script>
-	<script src="js/util/DataTableWidget.js"></script>
-	<script src="js/list/itemslist.js"></script>
+
 		<script type="text/javascript">	
 			var listSentOrderlinesWidget = new ListSentOrderLinesWidget({
 				dom: {
@@ -76,7 +78,9 @@
 						reset: $("#organizations-search-reset")
 					},
 					
-					managementLink: $("#org-management-page-link")
+					managementLink: $("#org-management-page-link"),
+					timer: '',
+					timerButton: $("#timer-button")
 				},
 				ui: {
 					rowClass: 'organization-row',
