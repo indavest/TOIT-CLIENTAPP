@@ -27,7 +27,7 @@
 
 </head>
 <body>
-	<nav class="navbar navbar-inverse" role="navigation">
+	<nav class="navbar navbar-inverse" role="navigation" id='kot-nav-bar'>
 
 	<div style='margin-left: 100px;'>
 	<img src='imgs/toit-logo.png' style='height:75px; width:75px; margin-top: 2px;'/>
@@ -51,7 +51,7 @@
 			</div>
 
 			<div class="input-group" id="search-input-group">
-				<span class="input-group-addon">SEARCH</span>
+				<span class="input-group-addon"><button type="button" class="btn btn-xs"><span class="glyphicon glyphicon-search"></span></button></span>
 				<input id="organizations-search-input" type="text" class="form-control" placeholder="Search Ordered items">
 				<span id="organizations-search-reset" class="input-group-addon"><button type="button" class="btn btn-xs"><span class="glyphicon glyphicon-remove"></span></button></span>
 			</div>
@@ -80,7 +80,8 @@
 					
 					managementLink: $("#org-management-page-link"),
 					timer: '',
-					timerButton: $("#timer-button")
+					timerButton: $("#timer-button"),
+					kotNavBar: $("#kot-nav-bar")
 				},
 				ui: {
 					rowClass: 'organization-row',
@@ -88,7 +89,7 @@
 					nameCellClass: 'list-name-cell'
 				},
 				url: {
-					restURL: 'http://10.10.10.21:8088/openbravo/com.indavest.openbravo.restaurantpos.service'
+					restURL: 'http://10.10.10.21:8088/openbravo/com.indavest.openbravo.restaurantpos.service/'
 				}
 			});
     

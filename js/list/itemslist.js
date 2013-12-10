@@ -29,10 +29,10 @@ var ListSentOrderLinesWidget = DataTableWidget.extend({
                 { "mDataProp": "itemName", "sTitle": "Item", "sClass": self.ui.nameCellClass, "sWidth": "200px",},
                 { "mDataProp": "itemQuantity", "sTitle": "Qty", "sDefaultContent": "", "sWidth": "100px"},
                 { "mDataProp": "itemTableId", "sTitle": "Table No", "sWidth": "100px", "sType": "date"},
-				//{ "mDataProp": "kot", "sTitle": "KOT", "sWidth": "50px"},
+				{ "mDataProp": "kotNumber", "sTitle": "KOT no.", "sWidth": "100px"},
                 { "mDataProp": "itemCreatedBy", "sTitle": "Steward", "sWidth": "100px"},
-				//{ "mDataProp": "itemInTime", "sTitle": "Intime", "sWidth": "50px"},
-				{ "mDataProp": "itemStatus", "sTitle": "Status", "sWidth": "200px"}
+				{ "mDataProp": "kotInTime", "sTitle": "In time", "sWidth": "100px"},
+				{ "mDataProp": "itemStatus", "sTitle": "Status", "sWidth": "100px"}
             ],
             "oLanguage": {
                 "sZeroRecords": "No Pending Items"
@@ -53,6 +53,12 @@ var ListSentOrderLinesWidget = DataTableWidget.extend({
     _addDatumToTable: function(datum) {
 			var status = "<button type='button' id="+datum.id+" class='btn btn-primary'>"+datum.itemStatus+"</span>";
 			datum.itemStatus = status;
+			if(datum.kotNumber === undefined){
+				datum.kotNumber = '';
+			}
+			if(datum.kotInTime === undefined){
+				datum.kotInTime = '';
+			}
             return datum;
     },
 	_startTimer: function(){
