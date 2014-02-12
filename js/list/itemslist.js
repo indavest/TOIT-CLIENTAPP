@@ -12,36 +12,38 @@ var ListSentOrderLinesWidget = DataTableWidget.extend({
     initView: function(data) {
         
         var self = this;
-        self._createTableRootDOM(self.dom.containerID, self.dom.tableID);
         
-        self.widget = $('#' + self.dom.tableID).dataTable({
-            "asStripeClasses": [self.ui.rowClass],
-            "bPaginate": false,
-            "bLengthChange": false,
-            "bFilter": true,
-			"bDestroy": true,
-            "iDisplayLength": 15,
-            "bSort": true,
-            "bInfo": false,
-            "bAutoWidth": true,
-            "sDom": "tip",
-            "aoColumns": [
-                { "mDataProp": "itemName", "sTitle": "Item", "sClass": self.ui.nameCellClass, "sWidth": "200px",},
-                { "mDataProp": "itemQuantity", "sTitle": "Qty", "sDefaultContent": "", "sWidth": "100px"},
-                { "mDataProp": "itemTableId", "sTitle": "Table No", "sWidth": "100px", "sType": "date"},
-				{ "mDataProp": "kotNumber", "sTitle": "KOT no.", "sWidth": "100px"},
-                { "mDataProp": "itemCreatedBy", "sTitle": "Steward", "sWidth": "100px"},
-				{ "mDataProp": "kotInTime", "sTitle": "In time", "sWidth": "100px"},
-				{ "mDataProp": "itemStatus", "sTitle": "Status", "sWidth": "100px"}
-            ],
-            "oLanguage": {
-                "sZeroRecords": "No Pending Items"
-            }
-        });
+        if(!self.widget){
+			self._createTableRootDOM(self.dom.containerID, self.dom.tableID);
+			self.widget = $('#' + self.dom.tableID).dataTable({
+				"asStripeClasses": [self.ui.rowClass],
+				"bPaginate": false,
+				"bLengthChange": false,
+				"bFilter": true,
+				"bDestroy": true,
+				"iDisplayLength": 15,
+				"bSort": true,
+				"bInfo": false,
+				"bAutoWidth": true,
+				"sDom": "tip",
+				"aoColumns": [
+					{ "mDataProp": "itemName", "sTitle": "Item", "sClass": self.ui.nameCellClass, "sWidth": "200px",},
+					{ "mDataProp": "itemQuantity", "sTitle": "Qty", "sDefaultContent": "", "sWidth": "100px"},
+					{ "mDataProp": "itemTableId", "sTitle": "Table No", "sWidth": "100px", "sType": "date"},
+					{ "mDataProp": "kotNumber", "sTitle": "KOT no.", "sWidth": "100px"},
+					{ "mDataProp": "itemCreatedBy", "sTitle": "Steward", "sWidth": "100px"},
+					{ "mDataProp": "kotInTime", "sTitle": "In time", "sWidth": "100px"},
+					{ "mDataProp": "itemStatus", "sTitle": "Status", "sWidth": "100px"}
+				],
+				"oLanguage": {
+					"sZeroRecords": "No Pending Items"
+				}
+			});
+		}
         
         if (data) {
-            self.addData(data, false);  
-            
+		
+            self.addData(data, false);
             self.widget.fnDraw();
         }
     },
@@ -92,7 +94,8 @@ var ListSentOrderLinesWidget = DataTableWidget.extend({
 				dataType: 'json',
 				async: false,
 				data:{
-					'Authorization' : 'Basic VG9pdEFkbWluOnRvaXRhZG1pbg=='
+					'Authorization' : 'Basic VG9pdEFkbWluOnRvaXRhZG1pbg==',
+					'isKotCall': false
 				},
 				success: function(response) {
 					self.initView($.parseJSON(response.data));
