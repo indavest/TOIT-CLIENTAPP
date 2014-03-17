@@ -95,7 +95,7 @@ var ListSentOrderLinesWidget = DataTableWidget.extend({
 				async: false,
 				data:{
 					'Authorization' : 'Basic VG9pdEFkbWluOnRvaXRhZG1pbg==',
-					'isKotCall': false
+					'isKotAction': false
 				},
 				success: function(response) {
 					self.initView($.parseJSON(response.data));
@@ -106,6 +106,8 @@ var ListSentOrderLinesWidget = DataTableWidget.extend({
 
     },
 	_changeKotItemStatus: function(itemId, itemStatus) {
+	
+		var self = this;
 		var status;
 		if(itemStatus === 'SENT') {
 			status = 'INPROGRESS';
@@ -120,17 +122,17 @@ var ListSentOrderLinesWidget = DataTableWidget.extend({
 			orderLineId: itemId,
 			orderLineStatus: status,
 			Authorization: 'Basic VG9pdEFkbWluOnRvaXRhZG1pbg==',
-			isKotCall: 'true'
+			isKotAction: 'true'
 		};
-		
+		self.widget.fnClearTable();
 		$.ajax({
 			type: 'get',
 			url: this.url.restURL,
 			dataType: 'json',
 			async: false,
 			data: requestParams,
-			success: function(data) {
-				console.log(data);
+			success: function(response) {
+				self.initView($.parseJSON(response.data));
 			},
 			error: function (response) {
 			}
