@@ -53,7 +53,19 @@ var ListSentOrderLinesWidget = DataTableWidget.extend({
      * should be done here.
      * */
     _addDatumToTable: function(datum) {
-			var status = "<button type='button' id="+datum.id+" class='btn btn-primary'>"+datum.itemStatus+"</span>";
+	
+			var status = null;
+			
+			if(datum.itemStatus === 'SENT') {
+				status = "<button type='button' id="+datum.id+" class='btn btn-info'>"+datum.itemStatus+"</span>";
+			} else if(datum.itemStatus === 'INPROGRESS') {
+				status = "<button type='button' id="+datum.id+" class='btn btn-primary'>"+datum.itemStatus+"</span>";
+			} else if(datum.itemStatus === 'PREPARED') {
+				status = "<button type='button' id="+datum.id+" class='btn btn-success'>"+datum.itemStatus+"</span>";
+			} else if(datum.itemStatus === 'INTRANSIT') {
+				status = "<button type='button' id="+datum.id+" class='btn btn-warning'>"+datum.itemStatus+"</span>";
+			}
+			
 			datum.itemStatus = status;
 			if(datum.kotNumber === undefined){
 				datum.kotNumber = '';
