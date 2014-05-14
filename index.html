@@ -16,12 +16,29 @@
 	<script src="js/list/itemslist.js"></script>
 	
 	<style>
-		#search-input-group {
-			width:50%;
+		#first-kot-search-input-group, #second-kot-search-input-group {
+			
 		}
 		.kot-items-view-btn {
 			width: 49px;
 			height: 34px;
+		}
+		#first-kot-list-table_wrapper {
+			display:inline;
+			float:left;
+		}
+		#second-kot-list-table_wrapper {
+			display:inline;
+		}
+		#organizations-container {
+			width: 50%;
+			display: inline;
+			float: left;
+			margin-left: 20px;
+		}
+		#second-kot-container {
+			width: 50%;
+			display: inline;
 		}
 	</style>
 
@@ -29,19 +46,17 @@
 <body>
 	<nav class="navbar navbar-inverse" role="navigation" id='kot-nav-bar'>
 
-	<div style='margin-left: 100px;'>
+	<div>
 	<img src='imgs/toit-logo.png' style='height:75px; width:75px; margin-top: 2px;'/>
-	<h2 style='display:inline !important; color:white; margin-left: 10px;'>Kitchen Ordering Ticket System</h2>
+	<h2 style='display:inline !important; color:white; margin-left: 10px;'>KOT</h2>
 	</div>
 
 	</nav>
-	<div class="container">
 		<section>
 		<div id="organizations-container" class="span13">
 
 		<div class="alert alert-warning">
-		  <p>Below is the list of Orderlines. Click particular Orderline's <em>status</em> to change it's 
-		  Status</p>
+		  <em>KOT List 1</em>
 		</div>
 
 		<form class="form-search">
@@ -50,7 +65,7 @@
 				  <button type="button"  id="refresh-KOT" class="btn btn-default kot-items-view-btn"><span class="glyphicon glyphicon-refresh"></span></button>
 			</div>
 
-			<div class="input-group" id="search-input-group">
+			<div class="input-group" id="first-kot-search-input-group">
 				<span class="input-group-addon"><button type="button" class="btn btn-xs"><span class="glyphicon glyphicon-search"></span></button></span>
 				<input id="organizations-search-input" type="text" class="form-control" placeholder="Search Ordered items">
 				<span id="organizations-search-reset" class="input-group-addon"><button type="button" class="btn btn-xs"><span class="glyphicon glyphicon-remove"></span></button></span>
@@ -58,11 +73,34 @@
 			
 			
 		</form>
-
+		<table class="table table-striped table-condensed dataTable" cellpadding="2" cellspacing="2" border="0" id="first-kot-list-table" style="width: 700px !important;">
+		</table>
 		</div>
+		
+		<div id="second-kot-container" class="span13">
+		
+		<div class="alert alert-warning">
+		  <em>KOT List 2</em>
+		</div>
+			<form class="form-search">
+			<div class="btn-group pull-right">
+				  <button type="button" id="second-kot-timer-button" class="btn btn-default kot-items-view-btn"><span class="glyphicon glyphicon glyphicon-dashboard"></span></button>
+				  <button type="button"  id="second-kot-refresh-KOT" class="btn btn-default kot-items-view-btn"><span class="glyphicon glyphicon-refresh"></span></button>
+			</div>
 
+			<div class="input-group" id="second-kot-search-input-group">
+				<span class="input-group-addon"><button type="button" class="btn btn-xs"><span class="glyphicon glyphicon-search"></span></button></span>
+				<input id="organizations-search-input" type="text" class="form-control" placeholder="Search Ordered items">
+				<span id="organizations-search-reset" class="input-group-addon"><button type="button" class="btn btn-xs"><span class="glyphicon glyphicon-remove"></span></button></span>
+			</div>
+			
+			
+		</form>
+		<table class="table table-striped table-condensed dataTable" cellpadding="2" cellspacing="2" border="0" id="second-kot-list-table" style="width: 700px !important;">
+		</table>
+		</div>
+		
 	</section>
-	</div>
 
 		<script type="text/javascript">	
 			var listSentOrderlinesWidget = new ListSentOrderLinesWidget({
@@ -71,7 +109,7 @@
 					container: $("#organizations-container"),
 					
 					containerID: "organizations-container",
-					tableID: "organizations-list-table",
+					tableID: $("#first-kot-list-table"),
 					
 					search: {
 						input: $("#organizations-search-input"),
@@ -92,8 +130,26 @@
 					restURL: 'http://10.10.10.21:8088/openbravo/org.openbravo.service.connector/xml/com.indavest.openbravo.restaurantpos.getKOTList'
 				}
 			});
-    
+			
+			var listSecondKOTSentOrderlinesWidget = new SecondKOTListSentOrderLinesWidget({
+				dom: {
+				
+					container: $("#second-kot-container"),
+					
+					containerID: "second-kot-container",
+					tableID: $("#second-kot-list-table")
+				},
+				ui: {
+					rowClass: 'second-kot-row',
+					rowId: 'second-kot-row-',
+					nameCellClass: 'list-name-cell'
+				},
+				url: {
+					restURL: 'http://10.10.10.21:8088/openbravo/org.openbravo.service.connector/xml/com.indavest.openbravo.restaurantpos.getKOTList'
+				}
+			});
 			listSentOrderlinesWidget.show();
+			listSecondKOTSentOrderlinesWidget.show();
 		</script>
 </body>
 </html>

@@ -13,9 +13,10 @@ var ListSentOrderLinesWidget = DataTableWidget.extend({
         
         var self = this;
         
-        if(!self.widget){
+
 			self._createTableRootDOM(self.dom.containerID, self.dom.tableID);
-			self.widget = $('#' + self.dom.tableID).dataTable({
+			if(!self.widget){
+				self.widget = self.dom.tableID.dataTable({
 				"asStripeClasses": [self.ui.rowClass],
 				"bPaginate": false,
 				"bLengthChange": false,
@@ -24,23 +25,22 @@ var ListSentOrderLinesWidget = DataTableWidget.extend({
 				"iDisplayLength": 15,
 				"bSort": true,
 				"bInfo": false,
-				"bAutoWidth": true,
+				"bAutoWidth": false,
 				"sDom": "tip",
 				"aoColumns": [
-					{ "mDataProp": "itemName", "sTitle": "Item", "sClass": self.ui.nameCellClass, "sWidth": "200px",},
-					{ "mDataProp": "itemQuantity", "sTitle": "Qty", "sDefaultContent": "", "sWidth": "100px"},
-					{ "mDataProp": "itemTableId", "sTitle": "Table No", "sWidth": "100px", "sType": "date"},
-					{ "mDataProp": "kotNumber", "sTitle": "KOT no.", "sWidth": "100px"},
-					{ "mDataProp": "itemCreatedBy", "sTitle": "Steward", "sWidth": "100px"},
-					{ "mDataProp": "kotInTime", "sTitle": "In time", "sWidth": "100px"},
-					{ "mDataProp": "itemStatus", "sTitle": "Status", "sWidth": "100px"}
+					{ "mDataProp": "itemName", "sTitle": "Item", "sClass": self.ui.nameCellClass, "sWidth": "100px",},
+					{ "mDataProp": "itemQuantity", "sTitle": "Qty", "sDefaultContent": "", "sWidth": "30px"},
+					{ "mDataProp": "itemTableId", "sTitle": "Table No", "sWidth": "50px", "sType": "date"},
+					{ "mDataProp": "kotNumber", "sTitle": "KOT no.", "sWidth": "20px"},
+					{ "mDataProp": "itemCreatedBy", "sTitle": "Steward", "sWidth": "20px"},
+					{ "mDataProp": "kotInTime", "sTitle": "In time", "sWidth": "40px"},
+					{ "mDataProp": "itemStatus", "sTitle": "Status", "sWidth": "40px"}
 				],
 				"oLanguage": {
 					"sZeroRecords": "No Pending Items"
 				}
 			});
-		}
-        
+			}
         if (data) {
 		
             self.addData(data, false);
@@ -159,6 +159,109 @@ var ListSentOrderLinesWidget = DataTableWidget.extend({
 			self._startTimer();
 		});
         self._bindSearchEvents();
+    }
+    
+});
+
+
+var SecondKOTListSentOrderLinesWidget = DataTableWidget.extend({
+    
+    init: function(params) {
+        this._super(params);
+    },
+    
+    show: function() {
+        this._fetchSentOrderLines();
+        this._bindGUIEvents();
+    },
+    
+    initView: function(data) {
+        
+        var self = this;
+        
+
+			self._createTableRootDOM(self.dom.containerID, self.dom.tableID);
+			if(!self.widget){
+				self.widget = self.dom.tableID.dataTable({
+				"asStripeClasses": [self.ui.rowClass],
+				"bPaginate": false,
+				"bLengthChange": false,
+				"bFilter": true,
+				"bDestroy": true,
+				"iDisplayLength": 15,
+				"bSort": true,
+				"bInfo": false,
+				"bAutoWidth": false,
+				"sDom": "tip",
+				"aoColumns": [
+					{ "mDataProp": "itemName", "sTitle": "Item", "sClass": self.ui.nameCellClass, "sWidth": "100px",},
+					{ "mDataProp": "itemQuantity", "sTitle": "Qty", "sDefaultContent": "", "sWidth": "30px"},
+					{ "mDataProp": "itemTableId", "sTitle": "Table No", "sWidth": "50px", "sType": "date"},
+					{ "mDataProp": "kotNumber", "sTitle": "KOT no.", "sWidth": "20px"},
+					{ "mDataProp": "itemCreatedBy", "sTitle": "Steward", "sWidth": "20px"},
+					{ "mDataProp": "kotInTime", "sTitle": "In time", "sWidth": "40px"},
+					{ "mDataProp": "itemStatus", "sTitle": "Status", "sWidth": "40px"}
+				],
+				"oLanguage": {
+					"sZeroRecords": "No Pending Items"
+				}
+			});
+			}
+        if (data) {
+		
+            self.addData(data, false);
+            self.widget.fnDraw();
+        }
+    },
+    
+    /*
+     * If anything special has to be done to the datum that goes in to the data-table model, it 
+     * should be done here.
+     * */
+    _addDatumToTable: function(datum) {
+	
+			var status = null;
+			
+			if(datum.itemStatus === 'SENT') {
+				status = "<button type='button' id="+datum.id+" class='btn btn-info'>"+datum.itemStatus+"</span>";
+			} else if(datum.itemStatus === 'INPROGRESS') {
+				status = "<button type='button' id="+datum.id+" class='btn btn-primary'>"+datum.itemStatus+"</span>";
+			} else if(datum.itemStatus === 'PREPARED') {
+				status = "<button type='button' id="+datum.id+" class='btn btn-success'>"+datum.itemStatus+"</span>";
+			} else if(datum.itemStatus === 'INTRANSIT') {
+				status = "<button type='button' id="+datum.id+" class='btn btn-warning'>"+datum.itemStatus+"</span>";
+			}
+			
+			datum.itemStatus = status;
+			if(datum.kotNumber === undefined){
+				datum.kotNumber = '';
+			}
+			if(datum.kotInTime === undefined){
+				datum.kotInTime = '';
+			}
+            return datum;
+    },
+    _fetchSentOrderLines: function() {
+		var self = this;
+		$.ajax({
+				type: 'get',
+				url: this.url.restURL,
+				dataType: 'json',
+				async: false,
+				data:{
+					'Authorization' : 'Basic VG9pdEFkbWluOnRvaXRhZG1pbg==',
+					'isKotAction': false
+				},
+				success: function(response) {
+					self.initView($.parseJSON(response.data));
+				},
+				error: function (response) {
+				}
+		});
+
+    },
+    _bindGUIEvents: function() {
+        var self = this;
     }
     
 });
